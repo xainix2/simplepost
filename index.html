@@ -3,7 +3,44 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Post to PHP</title>
     </head>
-    <body></body>
+    <body>
+        <p>enter you name</p>
+        <input type="text" id="name" name="name" />
+
+        <p>enter email</p>
+        <input type="email" name="email" id="email" />
+        <input type="button" value="submit" onclick="saveData();" />
+    </body>
+    <script>
+        // this function will be executed when submit button is executed
+        function saveData() {
+            // read the inputs from the html fields
+            let email = document.getElementById('email').value;
+            let name = document.getElementById('name').value;
+
+            if (email == '' || name == '') {
+                alert(' must enter both the fields ');
+                return;
+            }
+
+            fetch('store.php', {
+                // store.php is our php file to save the data
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, email: email }),
+            })
+                .then((response) => response.json())
+                .then(function (responce) {
+                    console.log(responce);
+                    if (responce.status == 'done') {
+                        alert('saved');
+                    }
+                });
+        }
+    </script>
 </html>
